@@ -41,8 +41,6 @@ public class CounterTest {
     @Test
     public void counterTest() {
         // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
@@ -60,8 +58,6 @@ public class CounterTest {
         fixedBottomNavigationTab.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(250);
         } catch (InterruptedException e) {
@@ -79,8 +75,6 @@ public class CounterTest {
         actionMenuItemView.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {

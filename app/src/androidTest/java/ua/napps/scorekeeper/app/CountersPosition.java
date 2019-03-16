@@ -1,4 +1,4 @@
-package ua.napps.scorekeeper.app.Counter;
+package ua.napps.scorekeeper.app;
 
 
 import android.view.View;
@@ -8,23 +8,28 @@ import android.view.ViewParent;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
+import androidx.test.espresso.assertion.PositionAssertions;
 import ua.com.napps.scorekeeper.R;
-import ua.napps.scorekeeper.app.MainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
+import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyLeftOf;
+import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyRightOf;
+import static androidx.test.espresso.assertion.PositionAssertions.isRightOf;
+import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -33,34 +38,22 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class DoubleCounterTest {
+public class CountersPosition {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void doubleCounter() {
+    public void countersPosition() {
+
+        final int counters = 8;
+
         // Added a sleep statement to match the app's execution delay.
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        ViewInteraction linearLayout = onView(
-                allOf(withId(R.id.empty_state),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.container),
-                                        0),
-                                2),
-                        isDisplayed()));
-        linearLayout.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.tv_counter_value),
-                        isDisplayed()));
-        textView.check(matches(withText("0")));
 
         ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.menu_add_counter), withContentDescription("Add counter"),
@@ -70,30 +63,26 @@ public class DoubleCounterTest {
                                         1),
                                 0),
                         isDisplayed()));
-        actionMenuItemView.perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.tv_counter_name), withText("2"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView2.check(matches(withText("2")));
+        for (int i = 1; i < counters; i++) {
 
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.tv_counter_name), withText("1"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView3.check(matches(withText("1")));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
+            actionMenuItemView.perform(click());
+
+            if(i > 1 && i <= 5) {
+                onView(allOf(withId(R.id.tv_counter_name), withText(Integer.toString(i))))
+                        .check(isCompletelyBelow(allOf(withId(R.id.tv_counter_name), withText(Integer.toString(i - 1)))));
+            } else if ((i % 2) == 0) {
+                onView(allOf(withId(R.id.tv_counter_name), withText(Integer.toString(i))))
+                        .check(isCompletelyRightOf(allOf(withId(R.id.tv_counter_name), withText(Integer.toString(i - 1)))));
+            }
+        }
     }
-
 
     @After
     public void cleanUp() {
@@ -152,4 +141,5 @@ public class DoubleCounterTest {
             }
         };
     }
+
 }
