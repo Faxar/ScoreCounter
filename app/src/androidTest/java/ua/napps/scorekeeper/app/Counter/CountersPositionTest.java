@@ -1,4 +1,4 @@
-package ua.napps.scorekeeper.app;
+package ua.napps.scorekeeper.app.Counter;
 
 
 import android.view.View;
@@ -21,15 +21,13 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import androidx.test.espresso.assertion.PositionAssertions;
 import ua.com.napps.scorekeeper.R;
+import ua.napps.scorekeeper.app.MainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
-import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyLeftOf;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyRightOf;
-import static androidx.test.espresso.assertion.PositionAssertions.isRightOf;
-import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -38,7 +36,7 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class CountersPosition {
+public class CountersPositionTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -63,6 +61,8 @@ public class CountersPosition {
                                         1),
                                 0),
                         isDisplayed()));
+
+        //Loop to create counters and at the same time check position of the counterbox.
 
         for (int i = 1; i < counters; i++) {
 
